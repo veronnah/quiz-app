@@ -1,45 +1,4 @@
-const quizData = [{
-        question: 'How old is Florin?',
-        a: '10',
-        b: '17',
-        c: '26',
-        d: '110',
-        correct: 'c'
-    },
-    {
-        question: 'What is the most used programming language in 2019?',
-        a: 'Java',
-        b: 'C',
-        c: 'Python',
-        d: 'JavaScript',
-        correct: 'a'
-    },
-    {
-        question: 'Who is the president of the US?',
-        a: 'Floring Pop',
-        b: 'Donald Trump',
-        c: 'Ivan Saldano',
-        d: 'Mihai Andrei',
-        correct: 'b'
-    },
-    {
-        question: 'What does HTML stand for?',
-        a: 'Hypertext Markup language',
-        b: 'Cascading Style Sheet',
-        c: 'Jason Object Notation',
-        d: 'Helicopters Terminals Motorboats Lamborginis',
-        correct: 'a'
-    },
-    {
-        question: 'What year was JavaScript launched?',
-        a: '1996',
-        b: '1995',
-        c: '1994',
-        d: '1998',
-        correct: 'b'
-    }
-]
-
+let quizData = [];
 let currentQuestion = 0;
 
 const answerELs = document.querySelectorAll(".answer");
@@ -55,8 +14,17 @@ let submitBtn = document.getElementById("submit");
 let currentQuiz = 0;
 let score = 0;
 let answer;
+window.onload = function(){
+    fetch("/json/quizdata.json")
+    .then(response => {
+        return response.json();
+    }).then(json => {
+        quizData =  json;
+        
+        loadQuiz();
+    });
 
-loadQuiz();
+}
 
 function loadQuiz() {
     deselectAnswers();
@@ -73,7 +41,6 @@ function loadQuiz() {
 }
 
 function getSelected() {
-   
 
     let answer = undefined; 
 
@@ -92,8 +59,6 @@ function deselectAnswers() {
         answerEl.checked = false;
     });
 }
-
-
 submitBtn.addEventListener('click', () => {
     //check to see the answer 
     const answer = getSelected();
@@ -108,7 +73,10 @@ submitBtn.addEventListener('click', () => {
         loadQuiz();
     } else {
        
-       quiz.innerHTML = `<h2>You answered correctly at ${score}/ ${quizData.length} questions.</h2>`;
+       quiz.innerHTML = `
+       <h2>You answered correctly at ${score}/ ${quizData.length} questions.</h2>
+        <button onclick = "location.reload()">Reload</button>
+       `;
     }
     }
     
